@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" role="img" aria-label="">
+  <defs>
+    <clipPath id="recorte"><rect width="360" height="220" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#recorte)">
+    <rect width="360" height="220" fill="#e4eef9"/>
+    <!-- quarteirões -->
+    <g fill="#eef4fb">
+      <rect x="18" y="16" width="74" height="44" rx="10"/>
+      <rect x="182" y="14" width="52" height="40" rx="10"/>
+      <rect x="22" y="138" width="60" height="30" rx="10"/>
+      <rect x="190" y="138" width="58" height="22" rx="8"/>
+    </g>
+    <!-- praça -->
+    <ellipse cx="300" cy="48" rx="64" ry="38" fill="#d6ebcf"/>
+    <g fill="#bfe0b5"><circle cx="280" cy="42" r="11"/><circle cx="306" cy="56" r="13"/><circle cx="326" cy="36" r="9"/></g>
+    <!-- água -->
+    <path d="M0 176c50-20 92 14 152 8s92 24 150 20c26-2 44 4 58 10v6H0z" fill="#cde2f5"/>
+    <!-- ruas -->
+    <path d="M-20 116c90-22 150 22 230-4s130-30 170-20" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/>
+    <path d="M-20 116c90-22 150 22 230-4s130-30 170-20" fill="none" stroke="#f2d7a0" stroke-width="2" stroke-dasharray="8 9"/>
+    <path d="M152 -20c-10 80 26 130 8 260" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+    <path d="M262 -20l16 260" fill="none" stroke="#f7fafe" stroke-width="9" stroke-linecap="round"/>
+    <!-- caminho até a vaga -->
+    <path d="M182 156c-18-6-34-18-52-40" fill="none" stroke="#2f7bf0" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="1 8"/>
+    <!-- você -->
+    <circle cx="184" cy="158" r="17" fill="#2f7bf0" fill-opacity=".16"/>
+    <circle cx="184" cy="158" r="8" fill="#2f7bf0" stroke="#fff" stroke-width="3"/>
+    <!-- vaga PCD -->
+    <ellipse cx="122" cy="112" rx="13" ry="4" fill="#2a2520" fill-opacity=".15"/>
+    <g transform="translate(98 48)">
+      <path d="M24 0C10.7 0 0 10.5 0 23.5 0 41 24 62 24 62s24-21 24-38.5C48 10.5 37.3 0 24 0z" fill="#1f5aae"/>
+      <circle cx="24" cy="23" r="16" fill="#fff"/>
+      <g transform="translate(12.5 11.5) scale(.96)" fill="#1f5aae">
+        <circle cx="12" cy="4" r="2"/>
+        <path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"/>
+      </g>
+    </g>
+    <!-- vaga idoso -->
+    <ellipse cx="238" cy="118" rx="13" ry="4" fill="#2a2520" fill-opacity=".15"/>
+    <g transform="translate(214 54)">
+      <path d="M24 0C10.7 0 0 10.5 0 23.5 0 41 24 62 24 62s24-21 24-38.5C48 10.5 37.3 0 24 0z" fill="#b5510f"/>
+      <circle cx="24" cy="23" r="16" fill="#fff"/>
+      <text x="24" y="28" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#b5510f">60+</text>
+    </g>
+    <!-- vaga distante -->
+    <g transform="translate(46 70) scale(.55)" opacity=".75">
+      <path d="M24 0C10.7 0 0 10.5 0 23.5 0 41 24 62 24 62s24-21 24-38.5C48 10.5 37.3 0 24 0z" fill="#1f5aae"/>
+      <circle cx="24" cy="23" r="12" fill="#fff"/>
+    </g>
+  </g>
+</svg>
