@@ -1,0 +1,5 @@
+storage/*.sqlite
+storage/documentos/*
+!storage/documentos/.gitkeep
+storage/cache/
+storage/push/

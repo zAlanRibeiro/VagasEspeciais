@@ -1,0 +1,29 @@
+# Apache — raiz do projeto
+Options -Indexes
+DirectoryIndex index.php
+
+AddType application/manifest+json .webmanifest
+
+# Compressão (o índice de ruas em JSON cai para cerca de 1/5 do tamanho)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE application/json application/manifest+json text/css application/javascript text/javascript image/svg+xml text/html
+</IfModule>
+
+# Repassa o cabeçalho Authorization (token do app) ao PHP em hospedagens com CGI/FastCGI.
+CGIPassAuth On
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP:Authorization} .
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+  # Em produção, force HTTPS (descomente após configurar o certificado):
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Bloqueia pastas internas mesmo se o .htaccess delas for removido.
+  RewriteRule ^(config|includes|database|storage)(/|$) - [F,L]
+</IfModule>
+
+<FilesMatch "\.(sql|sqlite|md|csv|log|ini)$">
+  Require all denied
+</FilesMatch>

@@ -1,0 +1,43 @@
+id;logradouro;numero;bairro;categoria;latitude;longitude;status
+EX-001;Rua Gavião Peixoto;182;Icaraí;PCD;-22.90418;-43.10912;ativa
+EX-002;Rua Gavião Peixoto;250;Icaraí;IDOSO;-22.90510;-43.10850;ativa
+EX-003;Rua Moreira César;229;Icaraí;PCD;-22.90560;-43.10600;ativa
+EX-004;Rua Moreira César;400;Icaraí;IDOSO;-22.90640;-43.10380;ativa
+EX-005;Avenida Roberto Silveira;123;Icaraí;PCD;-22.90300;-43.11050;ativa
+EX-006;Rua Mariz e Barros;300;Icaraí;IDOSO;-22.90250;-43.10700;ativa
+EX-007;Rua Pereira da Silva;150;Icaraí;PCD;-22.90120;-43.10950;ativa
+EX-008;Rua Lopes Trovão;200;Icaraí;PCD;-22.90680;-43.10250;ativa
+EX-009;Rua da Conceição;95;Centro;PCD;-22.89460;-43.12390;ativa
+EX-010;Rua da Conceição;180;Centro;IDOSO;-22.89580;-43.12260;ativa
+EX-011;Avenida Ernani do Amaral Peixoto;300;Centro;PCD;-22.89640;-43.12130;ativa
+EX-012;Avenida Ernani do Amaral Peixoto;455;Centro;IDOSO;-22.89740;-43.11880;ativa
+EX-013;Rua Visconde de Uruguai;531;Centro;PCD;-22.89240;-43.12480;ativa
+EX-014;Rua Doutor Celestino;122;Centro;IDOSO;-22.89850;-43.12000;ativa
+EX-015;Rua São Pedro;50;Centro;PCD;-22.89350;-43.12010;ativa
+EX-016;Rua Tiradentes;150;Ingá;PCD;-22.90100;-43.12350;ativa
+EX-017;Rua Presidente Pedreira;90;Ingá;IDOSO;-22.90330;-43.12550;ativa
+EX-018;Rua Professor Ernani Pires de Mello;40;São Domingos;PCD;-22.90050;-43.12780;ativa
+EX-019;Rua Santa Rosa;300;Santa Rosa;IDOSO;-22.90450;-43.09950;ativa
+EX-020;Rua Mário Viana;500;Santa Rosa;PCD;-22.90800;-43.09700;ativa
+EX-021;Avenida Rui Barbosa;100;São Francisco;PCD;-22.91600;-43.09450;ativa
+EX-022;Estrada Fróes;20;São Francisco;IDOSO;-22.91150;-43.10150;ativa
+EX-023;Avenida Quintino Bocaiúva;250;Charitas;PCD;-22.92800;-43.10450;ativa
+EX-024;Alameda São Boaventura;800;Fonseca;PCD;-22.88250;-43.10300;ativa
+EX-025;Alameda São Boaventura;1200;Fonseca;IDOSO;-22.88050;-43.09650;ativa
+EX-026;Rua Doutor Mário Vianna;10;Boa Viagem;IDOSO;-22.90750;-43.12900;ativa
+EX-027;Rua General Castrioto;300;Barreto;PCD;-22.87400;-43.10550;ativa
+EX-028;Avenida Almirante Tamandaré;500;Piratininga;IDOSO;-22.94900;-43.07000;ativa
+EX-029;Avenida Central;100;Itaipu;PCD;-22.95700;-43.04500;ativa
+EX-030;Avenida Professor Florestan Fernandes;200;Camboinhas;IDOSO;-22.96000;-43.06200;ativa
+EX-031;Rua Gavião Peixoto;120;Icaraí;ROTATIVO;-22.90380;-43.10950;ativa
+EX-032;Rua Moreira César;300;Icaraí;ROTATIVO;-22.90600;-43.10500;ativa
+EX-033;Avenida Roberto Silveira;300;Icaraí;ROTATIVO;-22.90330;-43.10880;ativa
+EX-034;Rua Mariz e Barros;150;Icaraí;ROTATIVO;-22.90190;-43.10780;ativa
+EX-035;Rua Lopes Trovão;100;Icaraí;ROTATIVO;-22.90620;-43.10330;ativa
+EX-036;Rua da Conceição;130;Centro;ROTATIVO;-22.89520;-43.12320;ativa
+EX-037;Avenida Ernani do Amaral Peixoto;380;Centro;ROTATIVO;-22.89690;-43.12000;ativa
+EX-038;Rua Visconde de Uruguai;400;Centro;ROTATIVO;-22.89300;-43.12400;ativa
+EX-039;Rua São Pedro;120;Centro;ROTATIVO;-22.89400;-43.11950;ativa
+EX-040;Rua Tiradentes;80;Ingá;ROTATIVO;-22.90050;-43.12420;ativa
+EX-041;Rua Santa Rosa;150;Santa Rosa;ROTATIVO;-22.90400;-43.10050;ativa
+EX-042;Avenida Rui Barbosa;250;São Francisco;ROTATIVO;-22.91700;-43.09300;ativa
