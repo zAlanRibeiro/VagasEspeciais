@@ -1,0 +1,20 @@
+{
+  "appId": "br.gov.rj.niteroi.vagasespeciais",
+  "appName": "Vagas Especiais",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": false
+    },
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
+    }
+  }
+}

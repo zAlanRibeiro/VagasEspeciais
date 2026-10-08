@@ -1,0 +1,6 @@
+node_modules/
+www/
+android/app/build/
+ios/App/Pods/
+src/config.local.js
+android/app/google-services.json

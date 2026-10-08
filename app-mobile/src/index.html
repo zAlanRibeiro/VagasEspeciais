@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org; connect-src 'self' http: https:; object-src 'none'">
+  <meta name="theme-color" content="#fbf8f3">
+  <title>Vagas Especiais</title>
+  <link rel="preload" href="fonts/nunito.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+  <link rel="stylesheet" href="vendor/markercluster/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="shared/app.css">
+  <link rel="stylesheet" href="css/app-mobile.css">
+</head>
+<body class="pagina-centro">
+<!-- ICONES -->
+
+<!-- Carregando -->
+<section class="tela tela-carregando" data-tela="carregando" aria-busy="true">
+  <img src="shared/img/icon.svg" alt="" width="84" height="84">
+  <p>Carregando…</p>
+</section>
+
+<!-- Boas-vindas -->
+<section class="tela cartao boas-vindas" data-tela="inicio" hidden>
+  <img class="ilustracao" src="shared/img/ilustracao-boas-vindas.svg" alt="" width="360" height="220">
+  <h1>Estacione com tranquilidade</h1>
+  <p class="lead">Vagas para <strong>pessoas com deficiência</strong>, <strong>pessoas idosas</strong> e do
+     <strong>estacionamento rotativo</strong> nas ruas de Niterói — e o caminho até elas com um toque.</p>
+  <ul class="beneficios">
+    <li><span class="bolha"><svg class="icone" aria-hidden="true"><use href="#i-mapa"/></svg></span> Todas as vagas da base oficial da Nittrans</li>
+    <li><span class="bolha bolha-verde"><svg class="icone" aria-hidden="true"><use href="#i-localizar"/></svg></span> As mais próximas de você primeiro</li>
+    <li><span class="bolha bolha-ambar"><svg class="icone" aria-hidden="true"><use href="#i-navegar"/></svg></span> Rota até a vaga com voz, no próprio app</li>
+  </ul>
+  <div class="acoes">
+    <button class="botao botao-primario" type="button" data-ir="login">Entrar</button>
+    <button class="botao" type="button" data-ir="cadastro">Criar conta</button>
+  </div>
+  <button type="button" class="botao botao-pequeno botao-acessivel" data-modo-acessivel aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-letra"/></svg> Letra maior e alto contraste</button>
+  <p class="rodape-tela"><a href="#" data-privacidade><svg class="icone icone-p" aria-hidden="true"><use href="#i-escudo"/></svg> Privacidade e termos de uso</a></p>
+  <!-- Só aparece nas versões de teste (npm run build sem --producao) -->
+  <p class="rodape-tela" id="servidor-teste" hidden>
+    <small>Servidor de teste: <span id="servidor-teste-url"></span><strong id="servidor-teste-status"></strong></small>
+    <button type="button" class="link-botao" id="btn-servidor-teste">alterar</button>
+  </p>
+</section>
+
+<!-- Login -->
+<section class="tela cartao" data-tela="login" hidden>
+  <div class="topo-tela">
+    <button class="botao-icone" type="button" data-ir="inicio" aria-label="Voltar ao início"><svg class="icone" aria-hidden="true"><use href="#i-voltar"/></svg></button>
+    <span class="marca-pequena"><img src="shared/img/icon.svg" alt="" width="26" height="26"> Vagas Especiais</span>
+  </div>
+  <h1>Entrar</h1>
+  <p class="subtitulo">Que bom ter você de volta!</p>
+  <p class="alerta alerta-ok" id="aviso-login" role="status" hidden></p>
+  <form id="form-login" novalidate>
+    <label for="login-email">E-mail</label>
+    <div class="campo">
+      <svg class="icone" aria-hidden="true"><use href="#i-email"/></svg>
+      <input id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="seu@email.com" required>
+    </div>
+    <label for="login-senha">Senha</label>
+    <div class="campo campo-senha">
+      <svg class="icone" aria-hidden="true"><use href="#i-cadeado"/></svg>
+      <input id="login-senha" name="senha" type="password" autocomplete="current-password" required>
+      <button type="button" class="mostrar-senha" aria-label="Mostrar senha" aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-olho"/></svg></button>
+    </div>
+    <p class="erro" data-erro role="alert" hidden></p>
+    <button class="botao botao-primario" type="submit">Entrar</button>
+  </form>
+  <p class="nota">Ainda não tem conta? <button class="link-botao" type="button" data-ir="cadastro">Cadastre-se</button></p>
+  <div class="rodape-tela"><button type="button" class="botao botao-pequeno botao-acessivel" data-modo-acessivel aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-letra"/></svg> Letra maior e alto contraste</button></div>
+</section>
+
+<!-- Cadastro -->
+<section class="tela cartao" data-tela="cadastro" hidden>
+  <div class="topo-tela">
+    <button class="botao-icone" type="button" data-ir="inicio" aria-label="Voltar ao início"><svg class="icone" aria-hidden="true"><use href="#i-voltar"/></svg></button>
+    <span class="marca-pequena"><img src="shared/img/icon.svg" alt="" width="26" height="26"> Vagas Especiais</span>
+  </div>
+  <h1>Criar conta</h1>
+  <p class="subtitulo">Todos começam com o rotativo. Se você é PCD ou idoso, marque abaixo: esses perfis são liberados depois que a equipe conferir a comprovação.</p>
+  <form id="form-cadastro" novalidate>
+    <label for="cad-nome">Nome completo</label>
+    <div class="campo">
+      <svg class="icone" aria-hidden="true"><use href="#i-usuario"/></svg>
+      <input id="cad-nome" name="nome" autocomplete="name" maxlength="150" required>
+    </div>
+    <label for="cad-email">E-mail</label>
+    <div class="campo">
+      <svg class="icone" aria-hidden="true"><use href="#i-email"/></svg>
+      <input id="cad-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="190" placeholder="seu@email.com" required>
+    </div>
+    <label for="cad-senha">Senha <span class="dica">(mínimo 8 caracteres)</span></label>
+    <div class="campo campo-senha">
+      <svg class="icone" aria-hidden="true"><use href="#i-cadeado"/></svg>
+      <input id="cad-senha" name="senha" type="password" autocomplete="new-password" minlength="8" required>
+      <button type="button" class="mostrar-senha" aria-label="Mostrar senha" aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-olho"/></svg></button>
+    </div>
+    <label for="cad-confirmar">Confirme a senha</label>
+    <div class="campo campo-senha">
+      <svg class="icone" aria-hidden="true"><use href="#i-cadeado"/></svg>
+      <input id="cad-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="8" required>
+      <button type="button" class="mostrar-senha" aria-label="Mostrar senha" aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-olho"/></svg></button>
+    </div>
+    <fieldset>
+      <legend>Seus perfis <span class="dica">(PCD e idoso são opcionais)</span></legend>
+      <div class="opcoes-cartao">
+        <label class="opcao-cartao">
+          <input type="checkbox" name="perfis[]" value="PCD" data-documento="cad-doc-pcd">
+          <span class="opcao-icone opcao-icone-pcd"><svg class="icone-pcd" aria-hidden="true"><use href="#i-pcd"/></svg></span>
+          <span class="opcao-texto"><strong>Pessoa com deficiência</strong><small>Precisa de comprovação e análise da equipe</small></span>
+          <span class="opcao-marca"><svg class="icone" aria-hidden="true"><use href="#i-check"/></svg></span>
+        </label>
+        <label class="opcao-cartao">
+          <input type="checkbox" name="perfis[]" value="IDOSO" data-documento="cad-doc-idoso">
+          <span class="opcao-icone opcao-icone-idoso">60+</span>
+          <span class="opcao-texto"><strong>Pessoa idosa</strong><small>Precisa de comprovação e análise da equipe</small></span>
+          <span class="opcao-marca"><svg class="icone" aria-hidden="true"><use href="#i-check"/></svg></span>
+        </label>
+        <label class="opcao-cartao">
+          <input type="checkbox" name="perfis[]" value="ROTATIVO" checked disabled>
+          <span class="opcao-icone opcao-icone-rotativo">P</span>
+          <span class="opcao-texto"><strong>Rotativo</strong><small>Estacionamento rotativo · incluído para todos, sem comprovação</small></span>
+          <span class="opcao-marca"><svg class="icone" aria-hidden="true"><use href="#i-check"/></svg></span>
+        </label>
+      </div>
+    </fieldset>
+    <div class="documento-perfil" id="cad-doc-pcd" hidden>
+      <label for="cad-doc-pcd-arquivo">Comprovação: pessoa com deficiência</label>
+      <label class="arquivo" for="cad-doc-pcd-arquivo">
+        <input id="cad-doc-pcd-arquivo" name="documento_PCD" type="file" accept="image/jpeg,image/png,application/pdf">
+        <span class="arquivo-icone"><svg class="icone icone-g" aria-hidden="true"><use href="#i-camera"/></svg></span>
+        <span class="arquivo-texto"><strong data-arquivo-nome>Tirar foto ou escolher arquivo</strong><small>Laudo médico ou credencial PCD · PDF, JPG ou PNG · até 5 MB</small></span>
+      </label>
+    </div>
+    <div class="documento-perfil" id="cad-doc-idoso" hidden>
+      <label for="cad-doc-idoso-arquivo">Comprovação: pessoa idosa</label>
+      <label class="arquivo" for="cad-doc-idoso-arquivo">
+        <input id="cad-doc-idoso-arquivo" name="documento_IDOSO" type="file" accept="image/jpeg,image/png,application/pdf">
+        <span class="arquivo-icone"><svg class="icone icone-g" aria-hidden="true"><use href="#i-camera"/></svg></span>
+        <span class="arquivo-texto"><strong data-arquivo-nome>Tirar foto ou escolher arquivo</strong><small>Documento com foto ou credencial de idoso · PDF, JPG ou PNG · até 5 MB</small></span>
+      </label>
+    </div>
+    <label class="opcao">
+      <input type="checkbox" name="aceite" value="1" required>
+      <span>Li e aceito a <a href="#" data-privacidade>política de privacidade e os termos de uso</a>.</span>
+    </label>
+    <p class="erro" data-erro role="alert" hidden></p>
+    <button class="botao botao-primario" type="submit">Enviar cadastro</button>
+  </form>
+  <p class="nota">Já tem conta? <button class="link-botao" type="button" data-ir="login">Entrar</button></p>
+</section>
+
+<!-- Perfil / andamento do cadastro -->
+<section class="tela cartao cartao-largo" data-tela="perfil" hidden>
+  <div class="topo-tela">
+    <button class="botao-icone" type="button" data-ir="mapa" id="perfil-voltar-mapa" aria-label="Voltar ao mapa" hidden><svg class="icone" aria-hidden="true"><use href="#i-voltar"/></svg></button>
+    <span class="marca-pequena" id="perfil-marca"><img src="shared/img/icon.svg" alt="" width="26" height="26"> Vagas Especiais</span>
+    <button class="botao botao-pequeno" type="button" data-sair><svg class="icone" aria-hidden="true"><use href="#i-sair"/></svg> Sair</button>
+  </div>
+
+  <div class="cartao-identidade">
+    <span class="avatar" id="perfil-avatar" aria-hidden="true"></span>
+    <div class="identidade-texto">
+      <h1 id="perfil-ola">Olá</h1>
+      <span class="email" id="perfil-email"></span>
+      <span class="selos-perfis" id="perfil-selos"></span>
+    </div>
+  </div>
+
+  <section class="painel-conteudo" aria-labelledby="t-avisos" id="bloco-avisos" hidden>
+    <h2 id="t-avisos">Avisos</h2>
+    <ul class="lista-cartoes" id="lista-avisos"></ul>
+  </section>
+
+  <section class="painel-conteudo" aria-labelledby="t-perfis">
+    <h2 id="t-perfis">Seus perfis</h2>
+    <p class="alerta alerta-erro" id="perfil-suspenso" hidden>Seu acesso foi suspenso pela administração. Em caso de dúvida, procure a Nittrans.</p>
+    <ul class="perfis" id="lista-perfis"></ul>
+    <div class="acoes-status">
+      <button class="botao botao-primario" type="button" data-ir="mapa" id="btn-abrir-mapa" hidden><svg class="icone" aria-hidden="true"><use href="#i-mapa"/></svg> Abrir mapa de vagas</button>
+      <button class="botao" type="button" id="btn-atualizar-status" hidden><svg class="icone" aria-hidden="true"><use href="#i-atualizar"/></svg> Atualizar status</button>
+    </div>
+
+    <div class="convite" id="convite-push" hidden>
+      <span class="bolha bolha-ambar"><svg class="icone" aria-hidden="true"><use href="#i-sino"/></svg></span>
+      <span class="config-texto"><strong>Quer ser avisado da aprovação?</strong><small>Mandamos uma notificação assim que a equipe analisar seu documento.</small></span>
+      <button type="button" class="botao botao-pequeno" id="btn-convite-push">Ativar</button>
+    </div>
+
+    <div id="bloco-perfis-novos" hidden>
+      <h3 class="titulo-novos">Adicionar perfil</h3>
+      <ul class="perfis perfis-novos" id="lista-perfis-novos"></ul>
+    </div>
+  </section>
+
+  <section class="painel-conteudo" aria-labelledby="t-comp" id="bloco-comprovacoes" hidden>
+    <h2 id="t-comp">Comprovações enviadas</h2>
+    <ul class="lista-cartoes" id="lista-comprovacoes"></ul>
+  </section>
+
+  <section class="painel-conteudo" aria-labelledby="t-rel" id="bloco-relatos" hidden>
+    <h2 id="t-rel">Meus relatos</h2>
+    <ul class="lista-cartoes" id="lista-relatos"></ul>
+  </section>
+
+  <section class="painel-conteudo" aria-labelledby="t-config">
+    <h2 id="t-config">Configurações</h2>
+    <div class="config-item">
+      <span class="bolha"><svg class="icone" aria-hidden="true"><use href="#i-letra"/></svg></span>
+      <span class="config-texto">
+        <strong id="cfg-acessivel">Letra maior e alto contraste</strong>
+        <small>Textos maiores, cores mais fortes e bordas bem marcadas.</small>
+      </span>
+      <button type="button" class="interruptor" role="switch" aria-labelledby="cfg-acessivel" aria-checked="false" data-modo-acessivel></button>
+    </div>
+    <div class="config-item">
+      <span class="bolha bolha-ambar"><svg class="icone" aria-hidden="true"><use href="#i-sino"/></svg></span>
+      <span class="config-texto">
+        <strong id="cfg-push">Avisos no celular</strong>
+        <small id="push-estado">Saiba na hora quando seu cadastro for analisado ou seu relato for respondido.</small>
+      </span>
+      <button type="button" class="interruptor" role="switch" aria-labelledby="cfg-push" aria-checked="false" id="interruptor-push" disabled></button>
+    </div>
+    <div class="config-item" id="cfg-tutorial-item" hidden>
+      <span class="bolha bolha-verde"><svg class="icone" aria-hidden="true"><use href="#i-info"/></svg></span>
+      <span class="config-texto">
+        <strong id="cfg-tutorial">Como usar o aplicativo</strong>
+        <small>Reveja o passo a passo e como liberar a localização.</small>
+      </span>
+      <button type="button" class="botao botao-pequeno" data-tutorial aria-label="Ver o tutorial de como usar o aplicativo">Ver</button>
+    </div>
+  </section>
+
+  <details class="zona-perigo" id="bloco-excluir">
+    <summary><svg class="icone" aria-hidden="true"><use href="#i-lixeira"/></svg> Excluir minha conta</summary>
+    <div class="conteudo">
+      <p>Seus dados pessoais e documentos serão apagados definitivamente. Os relatos enviados permanecem, sem identificação.</p>
+      <form id="form-excluir" novalidate>
+        <input type="hidden" name="acao" value="excluir">
+        <label for="excluir-senha">Confirme sua senha</label>
+        <div class="campo campo-senha">
+          <svg class="icone" aria-hidden="true"><use href="#i-cadeado"/></svg>
+          <input id="excluir-senha" name="senha" type="password" autocomplete="current-password" required>
+          <button type="button" class="mostrar-senha" aria-label="Mostrar senha" aria-pressed="false"><svg class="icone" aria-hidden="true"><use href="#i-olho"/></svg></button>
+        </div>
+        <p class="erro" data-erro role="alert" hidden></p>
+        <button class="botao botao-perigo botao-bloco acoes-form" type="submit"><svg class="icone" aria-hidden="true"><use href="#i-lixeira"/></svg> Excluir conta definitivamente</button>
+      </form>
+    </div>
+  </details>
+
+  <p class="rodape-tela"><a href="#" data-privacidade><svg class="icone icone-p" aria-hidden="true"><use href="#i-escudo"/></svg> Privacidade</a> · versão <span id="versao-app"></span></p>
+</section>
+
+<!-- Atualização obrigatória -->
+<section class="tela cartao boas-vindas" data-tela="atualizar" hidden>
+  <img class="ilustracao" src="shared/img/ilustracao-boas-vindas.svg" alt="" width="360" height="220">
+  <h1>Atualize o aplicativo</h1>
+  <p class="lead">Esta versão não é mais compatível. Atualize o Vagas Especiais pela loja de aplicativos para continuar.</p>
+</section>
+
+<!-- Mapa (mesmos IDs de public/mapa.php: a lógica vem de shared/mapa.js) -->
+<div class="tela tela-mapa" data-tela="mapa" hidden>
+  <div class="mapa-topo">
+    <header class="barra-mapa">
+      <span class="marca">
+        <img src="shared/img/icon.svg" alt="Vagas Especiais Niterói" width="40" height="40">
+      </span>
+      <form class="busca" id="form-busca" role="search" autocomplete="off">
+        <svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg>
+        <label class="sr-only" for="busca-campo">Buscar endereço, lugar ou bairro</label>
+        <input id="busca-campo" type="search" placeholder="Para onde você vai?" enterkeyhint="search"
+               role="combobox" aria-expanded="false" aria-controls="busca-sugestoes" aria-autocomplete="list" maxlength="120">
+        <button type="button" class="busca-limpar" id="busca-limpar" aria-label="Limpar busca" hidden><svg class="icone" aria-hidden="true"><use href="#i-fechar"/></svg></button>
+      </form>
+      <div class="busca-sugestoes" id="busca-sugestoes" role="listbox" aria-label="Sugestões de busca" hidden></div>
+      <div class="barra-acoes">
+        <button class="botao-icone botao-avatar" type="button" data-ir="perfil" aria-label="Meu perfil" id="botao-perfil"><svg class="icone" aria-hidden="true"><use href="#i-usuario"/></svg><span class="ponto-aviso" id="ponto-aviso" aria-hidden="true" hidden></span></button>
+      </div>
+    </header>
+
+    <section class="filtros" aria-label="Filtros">
+      <div class="chips" role="radiogroup" aria-label="Categoria">
+        <button type="button" class="chip" role="radio" aria-checked="true" data-categoria="">Todas</button>
+        <button type="button" class="chip chip-pcd" role="radio" aria-checked="false" data-categoria="PCD"><svg class="icone-pcd" aria-hidden="true"><use href="#i-pcd"/></svg> PCD</button>
+        <button type="button" class="chip chip-idoso" role="radio" aria-checked="false" data-categoria="IDOSO"><span class="chip-60">60+</span> Idoso</button>
+        <button type="button" class="chip chip-rotativo" role="radio" aria-checked="false" data-categoria="ROTATIVO"><span class="chip-p">P</span> Rotativo</button>
+      </div>
+      <label class="sr-only" for="filtro-bairro">Bairro</label>
+      <select id="filtro-bairro">
+        <option value="">Todos os bairros</option>
+      </select>
+    </section>
+  </div>
+
+  <main class="area-mapa">
+    <div id="mapa" role="application" aria-label="Mapa das vagas especiais"></div>
+
+    <div class="botoes-flutuantes">
+      <button type="button" id="btn-localizar" class="botao-redondo" aria-label="Mostrar minha localização"><svg class="icone" aria-hidden="true"><use href="#i-localizar"/></svg></button>
+      <button type="button" id="btn-lista" class="botao-redondo" aria-label="Ver lista de vagas" aria-expanded="false" aria-controls="painel-lista"><svg class="icone" aria-hidden="true"><use href="#i-lista"/></svg></button>
+    </div>
+
+    <p id="aviso-mapa" class="aviso-mapa" role="status" hidden></p>
+
+    <aside id="painel-lista" class="painel" aria-labelledby="t-lista" hidden>
+      <div class="alca" aria-hidden="true"></div>
+      <div class="painel-topo">
+        <h2 id="t-lista"><span id="t-lista-texto">Vagas</span> <span id="contador" class="contador"></span></h2>
+        <button type="button" class="fechar" data-fechar="painel-lista" aria-label="Fechar lista"><svg class="icone" aria-hidden="true"><use href="#i-fechar"/></svg></button>
+      </div>
+      <p class="dica" id="dica-lista">Toque no botão de localização para ver as mais próximas de você.</p>
+      <ol id="lista-vagas" class="lista-vagas"></ol>
+    </aside>
+
+    <aside id="painel-detalhe" class="painel" aria-labelledby="det-titulo" hidden>
+      <div class="alca" aria-hidden="true"></div>
+      <div class="painel-topo">
+        <span id="det-categoria" class="selo"></span>
+        <button type="button" class="fechar" data-fechar="painel-detalhe" aria-label="Fechar detalhes"><svg class="icone" aria-hidden="true"><use href="#i-fechar"/></svg></button>
+      </div>
+      <h2 id="det-titulo"></h2>
+      <p class="det-local"><svg class="icone" aria-hidden="true"><use href="#i-pin"/></svg> <span id="det-bairro"></span></p>
+      <div class="det-chips">
+        <span class="chip-info chip-distancia" id="det-distancia" hidden><svg class="icone" aria-hidden="true"><use href="#i-localizar"/></svg> <span id="det-distancia-texto"></span></span>
+        <span class="chip-info"><svg class="icone" aria-hidden="true"><use href="#i-relogio"/></svg> <span id="det-atualizado"></span></span>
+      </div>
+      <button type="button" id="btn-rota" class="botao botao-primario botao-bloco"><svg class="icone" aria-hidden="true"><use href="#i-rota"/></svg> Traçar rota até aqui</button>
+      <p class="abrir-externo">ou abrir no <a id="det-waze" data-externo>Waze</a> · <a id="det-gmaps" data-externo>Google Maps</a></p>
+      <div class="relatar">
+        <button type="button" id="btn-relatar" class="botao-texto"><svg class="icone" aria-hidden="true"><use href="#i-bandeira"/></svg> Relatar um problema nesta vaga</button>
+      </div>
+
+      <form id="form-relato" hidden novalidate>
+        <input type="hidden" name="vaga_id" id="relato-vaga">
+        <label for="relato-tipo">Qual o problema?</label>
+        <select id="relato-tipo" name="tipo" required>
+          <option value="">Selecione…</option>
+          <option value="localizacao_incorreta">Localização incorreta</option>
+          <option value="vaga_inexistente">Vaga inexistente</option>
+          <option value="sinalizacao_incorreta">Sinalização incorreta ou ausente</option>
+          <option value="vaga_obstruida">Vaga obstruída</option>
+          <option value="outro">Outro problema</option>
+        </select>
+        <label for="relato-descricao">Detalhes <span class="dica">(opcional)</span></label>
+        <textarea id="relato-descricao" name="descricao" rows="3" maxlength="1000" placeholder="Conte o que você encontrou no local"></textarea>
+        <p class="erro" data-erro role="alert" hidden></p>
+        <button class="botao botao-primario" type="submit">Enviar relato</button>
+      </form>
+      <p id="relato-ok" class="sucesso" role="status" hidden></p>
+    </aside>
+
+    <!-- Rota até a vaga (calculada no servidor com dados do OpenStreetMap) -->
+    <aside id="painel-rota" class="painel" aria-labelledby="rota-titulo" hidden>
+      <div class="alca" aria-hidden="true"></div>
+      <div class="painel-topo">
+        <h2 id="rota-titulo">Rota</h2>
+        <button type="button" class="fechar" id="rota-fechar" aria-label="Cancelar a rota"><svg class="icone" aria-hidden="true"><use href="#i-fechar"/></svg></button>
+      </div>
+      <p class="rota-resumo"><strong id="rota-tempo"></strong> <span id="rota-distancia"></span> <span id="rota-chegada"></span></p>
+      <p class="dica rota-aviso">Rota sem informação de trânsito em tempo real.</p>
+      <button type="button" id="btn-iniciar" class="botao botao-primario botao-bloco"><svg class="icone" aria-hidden="true"><use href="#i-navegar"/></svg> Iniciar</button>
+      <ol id="rota-passos" class="rota-passos" aria-label="Passo a passo"></ol>
+      <p class="rota-credito">Rotas: Valhalla (FOSSGIS) · dados © colaboradores do OpenStreetMap</p>
+    </aside>
+
+    <!-- Modo navegação -->
+    <div id="navegacao" class="navegacao" hidden>
+      <div class="nav-manobra" role="status" aria-live="polite">
+        <span class="nav-icone" id="nav-icone" aria-hidden="true"></span>
+        <span class="nav-texto"><strong id="nav-distancia"></strong><span id="nav-instrucao"></span></span>
+      </div>
+      <div class="nav-rodape">
+        <span class="nav-restante"><strong id="nav-tempo"></strong><span id="nav-km"></span></span>
+        <button type="button" class="botao-icone" id="nav-centralizar" aria-label="Centralizar no meu local" hidden><svg class="icone" aria-hidden="true"><use href="#i-localizar"/></svg></button>
+        <button type="button" class="botao-icone" id="nav-som" aria-pressed="true" aria-label="Desligar a voz"><svg class="icone" aria-hidden="true"><use href="#i-som"/></svg></button>
+        <button type="button" class="botao botao-perigo botao-pequeno" id="nav-encerrar">Encerrar</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="vendor/markercluster/leaflet.markercluster.js"></script>
+<script src="config.js"></script>
+<script src="shared/tutorial.js"></script>
+<script src="build/app.js"></script>
+<script src="shared/mapa.js"></script>
+</body>
+</html>
