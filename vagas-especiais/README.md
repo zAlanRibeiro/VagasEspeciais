@@ -22,7 +22,9 @@ testes formais de acessibilidade/usabilidade e publicação no servidor instituc
 
 ## Requisitos
 
-- PHP 8.1+ com as extensões `pdo_mysql`, `mbstring` e `zip` (esta última só para importar `.xlsx`)
+- PHP 8.2.35+, 8.3.36+, 8.4.27+ ou 8.5.12+ com as extensões `pdo_mysql`, `mbstring` e `zip` (esta última só para importar `.xlsx`).
+  Versões anteriores têm as falhas críticas CVE-2026-109618 e CVE-2026-109619 (execução remota de código sem login).
+  Em produção, deixe `session.upload_progress.enabled = Off` no `php.ini` (o sistema não usa)
 - MySQL 5.7+/MariaDB 10.3+
 - Apache com `mod_rewrite` e `AllowOverride All` (os `.htaccess` bloqueiam `config/`, `includes/`, `database/` e `storage/`)
 

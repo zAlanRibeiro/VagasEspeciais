@@ -37,7 +37,7 @@ ferramentas/       scripts dos atalhos .bat (Windows + XAMPP portátil)
 
 ## Começo rápido (sem MySQL)
 
-Com PHP 8.1+:
+Com PHP 8.2.35+ (ou 8.3.36+, 8.4.27+, 8.5.12+; ver [requisitos](vagas-especiais/README.md#requisitos)):
 
 ```powershell
 cd vagas-especiais
